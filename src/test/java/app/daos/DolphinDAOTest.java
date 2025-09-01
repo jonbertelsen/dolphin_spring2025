@@ -153,4 +153,10 @@ class DolphinDAOTest {
         assertThat(remaining, containsInAnyOrder(p1, p2));
     }
 
+    @Test
+    void getTotalFeeByPersonId() {
+        // Act
+        Long result = dolphinDAO.getTotalFeeByPersonId(p1.getId()).orElse(0L);
+        assertEquals(300, result);
+    }
 }

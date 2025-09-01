@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,15 @@ public class DolphinDAO implements IDAO<Person, Integer> {
             }
             em.getTransaction().commit();
             return false;
+        }
+    }
+
+    public Optional<Long> getTotalFeeByPersonId(Integer id){
+        try (EntityManager em = emf.createEntityManager()){
+            TypedQuery<Long> query = em.createQuery("SELECT sum(f.amount) FROM Fee f Where f.person.id = :id", Long.class);
+            query.setParameter("id", id);
+            Long result = query.getSingleResult();
+            return Optional.ofNullable(result);
         }
     }
 }

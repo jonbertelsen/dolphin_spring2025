@@ -12,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @ToString
+@EqualsAndHashCode
 @Entity
 public class Person {
     @Id
@@ -26,11 +27,11 @@ public class Person {
 
     // Relationer 1:m
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default  // <---- This one is necessary with @Builder
     private Set<Fee> fees = new HashSet<>();
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default  // <---- This one is necessary with @Builder
     private Set<Note> notes = new HashSet<>();
 

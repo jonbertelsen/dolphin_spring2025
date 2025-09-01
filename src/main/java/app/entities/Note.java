@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor @AllArgsConstructor
 @Builder @ToString
+@EqualsAndHashCode
 @Entity
 public class Note {
     @Id
@@ -19,5 +20,6 @@ public class Note {
     @ManyToOne
     @Setter
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Person person;
 }

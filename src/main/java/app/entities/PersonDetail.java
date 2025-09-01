@@ -1,9 +1,6 @@
 package app.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -12,6 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
+@EqualsAndHashCode
+@Table(name="person_detail")
 @Entity
 public class PersonDetail {
     @Id
@@ -26,6 +25,7 @@ public class PersonDetail {
     @OneToOne
     @MapsId
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Person person;
 
     public PersonDetail(String address, int zip, String city, int age) {

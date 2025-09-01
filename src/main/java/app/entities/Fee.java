@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @ToString
+@EqualsAndHashCode
 @Entity
 public class Fee {
     @Id
@@ -21,6 +22,7 @@ public class Fee {
     @ManyToOne
     @ToString.Exclude
     @Setter
+    @EqualsAndHashCode.Exclude
     private Person person;
 
 }

@@ -1,5 +1,6 @@
 package app.daos;
 
+import app.entities.Note;
 import app.entities.Person;
 import app.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -80,6 +81,14 @@ public class DolphinDAO implements IDAO<Person, Integer> {
             query.setParameter("id", id);
             Long result = query.getSingleResult();
             return Optional.ofNullable(result);
+        }
+    }
+
+    public List<Note> getNotesById(Integer id){
+        try (EntityManager em = emf.createEntityManager()){
+            TypedQuery<Note> query = em.createQuery("SELECT n FROM Note n WHERE n.person.id = :id", Note.class);
+            query.setParameter("id", id);
+            return query.getResultList();
         }
     }
 }

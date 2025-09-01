@@ -1,6 +1,7 @@
 package app.daos;
 
 import app.config.HibernateConfig;
+import app.entities.Note;
 import app.entities.Person;
 import app.exceptions.ApiException;
 import app.populators.PersonPopulator;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -157,6 +159,16 @@ class DolphinDAOTest {
     void getTotalFeeByPersonId() {
         // Act
         Long result = dolphinDAO.getTotalFeeByPersonId(p1.getId()).orElse(0L);
+        // Assert
         assertEquals(300, result);
+    }
+
+    @Test
+    void getNotesById() {
+        List<Note> expectedNotes = p3.getNotes().stream().toList();
+        List<Note> notes = dolphinDAO.getNotesById(p3.getId());
+        assertEquals(2, notes.size());
+        assertThat(notes, containsInAnyOrder(expectedNotes.get(0), expectedNotes.get(1) ));
+
     }
 }

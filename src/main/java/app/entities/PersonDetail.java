@@ -13,8 +13,7 @@ import lombok.*;
 @Builder
 @ToString
 @Entity
-public class PersonDetail
-{
+public class PersonDetail {
     @Id
     private Integer id;
     private String Address;
@@ -29,8 +28,7 @@ public class PersonDetail
     @ToString.Exclude
     private Person person;
 
-    public PersonDetail(String address, int zip, String city, int age)
-    {
+    public PersonDetail(String address, int zip, String city, int age) {
         Address = address;
         this.zip = zip;
         this.city = city;

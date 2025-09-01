@@ -13,8 +13,7 @@ import java.util.Set;
 @Builder
 @ToString
 @Entity
-public class Person
-{
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,7 +21,7 @@ public class Person
 
     // Relationer 1:1
 
-    @OneToOne(mappedBy="person", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     private PersonDetail personDetail;
 
     // Relationer 1:m
@@ -31,23 +30,30 @@ public class Person
     @Builder.Default  // <---- This one is necessary with @Builder
     private Set<Fee> fees = new HashSet<>();
 
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    @Builder.Default  // <---- This one is necessary with @Builder
+    private Set<Note> notes = new HashSet<>();
+
     // Bi-directional update
 
-    public void addPersonDetail(PersonDetail personDetail)
-    {
+    public void addPersonDetail(PersonDetail personDetail) {
         this.personDetail = personDetail;
-        if (personDetail != null)
-        {
+        if (personDetail != null) {
             personDetail.setPerson(this);
         }
     }
 
-    public void addFee(Fee fee)
-    {
+    public void addFee(Fee fee) {
         this.fees.add(fee);
-        if (fee != null)
-        {
+        if (fee != null) {
             fee.setPerson(this);
+        }
+    }
+
+    public void addNote(Note note) {
+        this.notes.add(note);
+        if (note != null) {
+            note.setPerson(this);
         }
     }
 

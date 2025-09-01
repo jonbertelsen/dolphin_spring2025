@@ -6,14 +6,12 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
 @Entity
-public class Fee
-{
+public class Fee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
@@ -22,6 +20,7 @@ public class Fee
 
     @ManyToOne
     @ToString.Exclude
+    @Setter
     private Person person;
 
 }

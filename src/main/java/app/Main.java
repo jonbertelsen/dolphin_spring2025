@@ -1,6 +1,8 @@
 package app;
 
 import app.config.HibernateConfig;
+import app.daos.DolphinDAO;
+import app.dtos.NoteDTO;
 import app.entities.Fee;
 import app.entities.Note;
 import app.entities.Person;
@@ -9,13 +11,15 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello Dolphin!");
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        try (EntityManager em = emf.createEntityManager()) {
+        DolphinDAO dao = new DolphinDAO(emf);
+
             Person p1 = Person.builder()
                     .name("Hanzi")
                     .build();
@@ -42,11 +46,13 @@ public class Main {
             p1.addNote(n1);
             p1.addNote(n2);
 
-            em.getTransaction().begin();
-            em.persist(p1);
-            em.getTransaction().commit();
-            System.out.println(p1.toString());
-        }
+           dao.create(p1);
+           System.out.println(p1.toString());
+
+           System.out.println("Note list >>>>>");
+           List<NoteDTO> noteList = dao.getNoteList();
+           noteList.forEach(System.out::println);
+
         emf.close();
     }
 }

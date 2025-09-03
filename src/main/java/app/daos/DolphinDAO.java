@@ -1,5 +1,6 @@
 package app.daos;
 
+import app.dtos.NoteDTO;
 import app.entities.Note;
 import app.entities.Person;
 import app.exceptions.ApiException;
@@ -91,4 +92,13 @@ public class DolphinDAO implements IDAO<Person, Integer> {
             return query.getResultList();
         }
     }
+
+    public List<NoteDTO> getNoteList(){
+        try (EntityManager em = emf.createEntityManager()){
+            TypedQuery<NoteDTO> query = em.createQuery("SELECT new app.dtos.NoteDTO(n.note, p.name, pd.age) FROM Note n JOIN n.person p JOIN p.personDetail pd", NoteDTO.class);
+            return query.getResultList();
+        }
+    }
+
+
 }

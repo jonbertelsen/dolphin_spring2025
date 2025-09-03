@@ -14,7 +14,6 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -23,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DolphinDAOTest {
 
-    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private static final DolphinDAO dolphinDAO = new DolphinDAO(emf);
-    private static Person p1;
-    private static Person p2;
-    private static Person p3;
-    private static List<Person> persons;
+    private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
+    private final DolphinDAO dolphinDAO = new DolphinDAO(emf);
+    private Person p1;
+    private Person p2;
+    private Person p3;
+    private List<Person> persons;
 
     @BeforeEach
     void setUp() {

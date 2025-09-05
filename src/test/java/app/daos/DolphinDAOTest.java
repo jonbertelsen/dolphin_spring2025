@@ -7,10 +7,7 @@ import app.exceptions.ApiException;
 import app.populators.PersonPopulator;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
@@ -21,12 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DolphinDAOTest {
 
-    private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private final DolphinDAO dolphinDAO = new DolphinDAO(emf);
+    private EntityManagerFactory emf;
+    private DolphinDAO dolphinDAO;
     private Person p1;
     private Person p2;
     private Person p3;
     private List<Person> persons;
+
+    @BeforeAll
+    void initOnce() {
+        emf = HibernateConfig.getEntityManagerFactoryForTest();
+        dolphinDAO = new DolphinDAO(emf);
+    }
 
     @BeforeEach
     void setUp() {
@@ -35,7 +38,6 @@ class DolphinDAOTest {
             em.createNativeQuery("TRUNCATE TABLE fee, person_detail, person RESTART IDENTITY CASCADE")
                     .executeUpdate();
             em.getTransaction().commit();
-            emf.getCache().evictAll(); // ensure no 2nd-level cache leftovers
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to truncate tables", e);
@@ -55,7 +57,6 @@ class DolphinDAOTest {
     void tearDown() {
         if (emf != null && emf.isOpen()) {
             emf.close();
-            System.out.println("EntityManagerFactory closed.");
         }
     }
 

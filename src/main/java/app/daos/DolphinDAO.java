@@ -1,5 +1,7 @@
 package app.daos;
 
+import app.dtos.NotePersonDTO;
+import app.dtos.NotePersonRecordDTO;
 import app.entities.Note;
 import app.entities.Person;
 import app.exceptions.ApiException;
@@ -33,10 +35,9 @@ public class DolphinDAO implements IDAO<Person, Integer> {
     }
 
     @Override
-    public Optional<Person> getById(Integer id) {
+    public Person getById(Integer id) {
         try (EntityManager em = emf.createEntityManager()){
-            Person person = em.find(Person.class, id);
-            return Optional.ofNullable(person);
+           return em.find(Person.class, id);  // OBS! Could be null
         }
     }
 
@@ -91,4 +92,16 @@ public class DolphinDAO implements IDAO<Person, Integer> {
             return query.getResultList();
         }
     }
+
+    public List<NotePersonRecordDTO> getNotesAndPersonInfo(){
+        try (EntityManager em = emf.createEntityManager()){
+            TypedQuery<NotePersonRecordDTO> query =
+                    em.createQuery("SELECT new app.dtos.NotePersonRecordDTO(n.note, p.name, pd.age) FROM Note n JOIN n.person p JOIN p.personDetail pd"
+                    , NotePersonRecordDTO.class);
+            return query.getResultList();
+        }
+    }
+
+
+
 }

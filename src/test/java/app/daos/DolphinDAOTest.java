@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -80,18 +79,18 @@ class DolphinDAOTest {
     @Test
     void getById() {
         // Act
-        Optional<Person> person = dolphinDAO.getById(p1.getId());
+       Person person = dolphinDAO.getById(p1.getId());
         // Assert
-        assertThat("Expected person to be present", person.isPresent(), is(true));
-        assertThat(person.get(), hasProperty("id", is(p1.getId())));
-        assertThat(person.get(), hasProperty("name", is(p1.getName())));
-        assertEquals(person.get(), p1);
+        assertNotNull(person);
+        assertThat(person, hasProperty("id", is(p1.getId())));
+        assertThat(person, hasProperty("name", is(p1.getName())));
+        assertEquals(person, p1);
     }
 
     @Test
     void getById_missing() {
-        Optional<Person> missing = dolphinDAO.getById(-999);
-        assertThat(missing.isEmpty(), is(true));
+        Person missing = dolphinDAO.getById(-999);
+        assertNull(missing);
     }
 
     @Test
@@ -123,9 +122,9 @@ class DolphinDAOTest {
         assertThat(merged, hasProperty("name", is(updatedName)));
 
         // Assert (read-back consistency)
-        Optional<Person> reloaded = dolphinDAO.getById(p2.getId());
-        assertThat(reloaded.isPresent(), is(true));
-        assertThat(reloaded.get(), hasProperty("name", is(updatedName)));
+        Person reloaded = dolphinDAO.getById(p2.getId());
+        assertNotNull(reloaded);
+        assertThat(reloaded, hasProperty("name", is(updatedName)));
 
         // Count unchanged (still 3 from populator)
         assertEquals(3, dolphinDAO.getAll().size());
@@ -145,8 +144,8 @@ class DolphinDAOTest {
         dolphinDAO.delete(p3.getId());
 
         // Assert: now p3 should be gone
-        Optional<Person> afterDelete = dolphinDAO.getById(p3.getId());
-        assertThat(afterDelete.isEmpty(), is(true));
+        Person afterDelete = dolphinDAO.getById(p3.getId());
+        assertNull(afterDelete);
 
         // Count should drop to 2
         List<Person> remaining = dolphinDAO.getAll();
@@ -168,6 +167,5 @@ class DolphinDAOTest {
         List<Note> notes = dolphinDAO.getNotesById(p3.getId());
         assertEquals(2, notes.size());
         assertThat(notes, containsInAnyOrder(expectedNotes.get(0), expectedNotes.get(1) ));
-
     }
 }

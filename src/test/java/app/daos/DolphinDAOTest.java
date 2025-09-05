@@ -35,9 +35,10 @@ class DolphinDAOTest {
             em.createNativeQuery("TRUNCATE TABLE fee, person_detail, person RESTART IDENTITY CASCADE")
                     .executeUpdate();
             em.getTransaction().commit();
+            emf.getCache().evictAll(); // ensure no 2nd-level cache leftovers
         }
         catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to truncate tables", e);
         }
 
         persons = PersonPopulator.populatePersons(dolphinDAO);
@@ -73,7 +74,6 @@ class DolphinDAOTest {
         // And the total count should be 4 (3 from populator + 1 new)
         List<Person> all = dolphinDAO.getAll();
         assertEquals(4, all.size());
-
     }
 
     @Test
@@ -89,7 +89,9 @@ class DolphinDAOTest {
 
     @Test
     void getById_missing() {
+        // Act
         Person missing = dolphinDAO.getById(-999);
+        // Assert
         assertNull(missing);
     }
 
@@ -132,9 +134,9 @@ class DolphinDAOTest {
 
     @Test
     void update_nonExisting_shouldNotCreateSilently() {
+        // Arrange
         Person phantom = Person.builder().id(9999).name("Ghost").build();
-        // Expect: either exception, or false, or Optional.empty()
-        // For example, if you choose to throw:
+        // Act + Assert
         assertThrows(ApiException.class, () -> dolphinDAO.update(phantom));
     }
 
@@ -163,8 +165,11 @@ class DolphinDAOTest {
 
     @Test
     void getNotesById() {
+        // Arrange
         List<Note> expectedNotes = p3.getNotes().stream().toList();
+        // Act
         List<Note> notes = dolphinDAO.getNotesById(p3.getId());
+        // Assert
         assertEquals(2, notes.size());
         assertThat(notes, containsInAnyOrder(expectedNotes.get(0), expectedNotes.get(1) ));
     }

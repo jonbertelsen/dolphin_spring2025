@@ -102,6 +102,4 @@ public class DolphinDAO implements IDAO<Person, Integer> {
         }
     }
 
-
-
 }

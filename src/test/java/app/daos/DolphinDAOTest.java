@@ -20,9 +20,7 @@ class DolphinDAOTest {
 
     private EntityManagerFactory emf;
     private DolphinDAO dolphinDAO;
-    private Person p1;
-    private Person p2;
-    private Person p3;
+    private Person p1, p2, p3;
     private List<Person> persons;
 
     @BeforeAll
@@ -69,12 +67,13 @@ class DolphinDAOTest {
         Person created = dolphinDAO.create(newPerson);
 
         // Assert
-        assertNotNull(created.getId(), "Created person should have an ID");
+        assertNotNull(created, "Created person should have an ID");
         assertEquals("Diana Douglas", created.getName());
 
         // And the total count should be 4 (3 from populator + 1 new)
         List<Person> all = dolphinDAO.getAll();
         assertEquals(4, all.size());
+        assertThat(all, containsInAnyOrder(p1, p2, p3, created));
     }
 
     @Test

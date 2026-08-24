@@ -1,6 +1,5 @@
 package app.daos;
 
-import app.dtos.NotePersonDTO;
 import app.dtos.NotePersonRecordDTO;
 import app.entities.Note;
 import app.entities.Person;
@@ -9,7 +8,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 
 import java.util.List;
 import java.util.Optional;
